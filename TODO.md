@@ -5,3 +5,4 @@
 * High scores?
 * Rudimentary AI
 * Collision check with paddle
+* Stop paddle from moving off the screen
