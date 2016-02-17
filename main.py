@@ -5,7 +5,7 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.core.window import Window
-
+import random
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
@@ -44,12 +44,26 @@ class PongGame(Widget):
 
     def update(self, dt):
         self.ball.move()
+
+        #CPU player as player2: player2 paddle tracks vertical position of ball
+        # controls how much cpu paddle moves during each tick
+        cpu_paddle_speed = 2+random.randint(1,4) # increase -> more difficult
+        # cpu decides to move based on difference between its paddle's y
+        # position and that of the ball
+        cpu_detect_motion = 100 # decrease -> more difficult
+        if self.player2.center_y - self.ball.y < -cpu_detect_motion:
+            self.player2.center_y += cpu_paddle_speed
+        elif self.player2.center_y - self.ball.y > cpu_detect_motion:
+            self.player2.center_y -= cpu_paddle_speed
+
         #bounce of paddles
         self.player1.bounce_ball(self.ball)
         self.player2.bounce_ball(self.ball)
+
         #bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
+
         #went off to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
@@ -57,11 +71,13 @@ class PongGame(Widget):
         if self.ball.x > self.width:
             self.player1.score += 1
             self.serve_ball(vel=(-4, 0))
+
     def on_touch_move(self, touch):
         if touch.x < self.width / 3:
             self.player1.center_y = touch.y
-        if touch.x > self.width - self.width / 3:
-            self.player2.center_y = touch.y
+        # player2 is cpu player
+        #if touch.x > self.width - self.width / 3:
+        #    self.player2.center_y = touch.y
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         move_on_press = 50
@@ -69,10 +85,11 @@ class PongGame(Widget):
             self.player1.center_y += move_on_press
         elif keycode[1] == 's':
             self.player1.center_y -= move_on_press
-        elif keycode[1] == 'up':
-            self.player2.center_y += move_on_press
-        elif keycode[1] == 'down':
-            self.player2.center_y -= move_on_press
+        # player2 is cpu player
+        #elif keycode[1] == 'up':
+        #    self.player2.center_y += move_on_press
+        #elif keycode[1] == 'down':
+        #    self.player2.center_y -= move_on_press
         return True
 
 class PongApp(App):

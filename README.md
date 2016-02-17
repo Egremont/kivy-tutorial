@@ -1,6 +1,10 @@
 # kivy-tutorial
 Playing around with the Kivy tutorials.
 
+## CPU Player
+* Very rudimentary CPU player acting as player2
+* Paddle tracks vertical position of ball
+
 ## Arrow key controls
 Tutorial has touch controls. 
 * Update code to have arrow key controls.
