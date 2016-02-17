@@ -1,6 +1,9 @@
 # kivy-tutorial
 Playing around with the Kivy tutorials.
 
+## Border collision detection
+* Stop paddle from moving off the screen
+
 ## CPU Player
 * Very rudimentary CPU player acting as player2
 * Paddle tracks vertical position of ball

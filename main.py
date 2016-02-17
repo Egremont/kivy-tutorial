@@ -52,9 +52,15 @@ class PongGame(Widget):
         # position and that of the ball
         cpu_detect_motion = 100 # decrease -> more difficult
         if self.player2.center_y - self.ball.y < -cpu_detect_motion:
-            self.player2.center_y += cpu_paddle_speed
+            # check paddle is not at upper border
+            if self.player2.center_y + self.player2.height/2 < self.top:
+                #paddle below ball, move up
+                self.player2.center_y += cpu_paddle_speed
         elif self.player2.center_y - self.ball.y > cpu_detect_motion:
-            self.player2.center_y -= cpu_paddle_speed
+            # check paddle is not at lower border
+            if self.player2.center_y - self.player2.height/2 > self.y:
+                #paddle above ball, move down
+                self.player2.center_y -= cpu_paddle_speed
 
         #bounce of paddles
         self.player1.bounce_ball(self.ball)
@@ -72,19 +78,24 @@ class PongGame(Widget):
             self.player1.score += 1
             self.serve_ball(vel=(-4, 0))
 
-    def on_touch_move(self, touch):
-        if touch.x < self.width / 3:
-            self.player1.center_y = touch.y
-        # player2 is cpu player
-        #if touch.x > self.width - self.width / 3:
-        #    self.player2.center_y = touch.y
+    # using keyboard controls so commented out touch methods
+    #def on_touch_move(self, touch):
+    #    if touch.x < self.width / 3:
+    #        self.player1.center_y = touch.y
+    #    # player2 is cpu player
+    #    #if touch.x > self.width - self.width / 3:
+    #    #    self.player2.center_y = touch.y
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         move_on_press = 50
         if keycode[1] == 'w':
-            self.player1.center_y += move_on_press
+            # check paddle is not at upper border
+            if self.player1.center_y + self.player1.height/2 < self.top:
+                self.player1.center_y += move_on_press
         elif keycode[1] == 's':
-            self.player1.center_y -= move_on_press
+            # check paddle is not at lower border
+            if self.player1.center_y - self.player1.height/2 > self.y:
+                self.player1.center_y -= move_on_press
         # player2 is cpu player
         #elif keycode[1] == 'up':
         #    self.player2.center_y += move_on_press
