@@ -6,3 +6,4 @@
 * ~~Rudimentary AI~~
 * Collision check with paddle
 * ~~Stop paddle from moving off the screen~~
+* Write function for paddle detection for code reuse
