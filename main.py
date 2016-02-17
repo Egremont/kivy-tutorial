@@ -50,7 +50,7 @@ class PongGame(Widget):
         #bounce ball off bottom or top
         if (self.ball.y < self.y) or (self.ball.top > self.top):
             self.ball.velocity_y *= -1
-        #went of to a side to score point?
+        #went off to a side to score point?
         if self.ball.x < self.x:
             self.player2.score += 1
             self.serve_ball(vel=(4, 0))
@@ -64,15 +64,16 @@ class PongGame(Widget):
             self.player2.center_y = touch.y
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        move_on_press = 50
         if keycode[1] == 'w':
-            self.player1.center_y += 10
+            self.player1.center_y += move_on_press
         elif keycode[1] == 's':
-            self.player1.center_y -= 10
+            self.player1.center_y -= move_on_press
         elif keycode[1] == 'up':
-            self.player2.center_y += 10
+            self.player2.center_y += move_on_press
         elif keycode[1] == 'down':
-            self.player2.center_y -= 10
-        return True            
+            self.player2.center_y -= move_on_press
+        return True
 
 class PongApp(App):
     def build(self):
