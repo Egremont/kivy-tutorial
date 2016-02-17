@@ -1,5 +1,5 @@
 # kivy-tutorial
-Playing around with the Kivy tutorials.
+Playing around with the PONG game from the Kivy tutorial.
 
 ## Border collision detection
 * Stop paddle from moving off the screen
