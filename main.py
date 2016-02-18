@@ -42,7 +42,13 @@ class PongGame(Widget):
         self.ball.center = self.center
         self.ball.velocity = vel
 
-    def check_paddle_border(self, player_center, player_height, border_id):
+    def check_paddle_border(self, player_id, border_id):
+        if player_id==1:
+            player_center = self.player1.center_y
+            player_height = self.player1.height
+        elif player_id==2:
+            player_center = self.player2.center_y
+            player_height = self.player2.height
         if border_id=='top':
             return player_center + player_height/2 < self.top
         elif border_id=='bottom':
@@ -59,12 +65,12 @@ class PongGame(Widget):
         cpu_detect_motion = 100 # decrease -> more difficult
         if self.player2.center_y - self.ball.y < -cpu_detect_motion:
             # check paddle is not at upper border
-            if self.check_paddle_border( self.player2.center_y, self.player2.height, 'top'):
+            if self.check_paddle_border( player_id=2, border_id='top'):
                 #paddle below ball, move up
                 self.player2.center_y += cpu_paddle_speed
         elif self.player2.center_y - self.ball.y > cpu_detect_motion:
             # check paddle is not at lower border
-            if self.check_paddle_border( self.player2.center_y, self.player2.height, 'bottom'):
+            if self.check_paddle_border( player_id=2, border_id='bottom'):
                 #paddle above ball, move down
                 self.player2.center_y -= cpu_paddle_speed
 
@@ -96,11 +102,11 @@ class PongGame(Widget):
         move_on_press = 50
         if keycode[1] == 'w':
             # check paddle is not at upper border
-            if self.check_paddle_border( self.player1.center_y, self.player1.height, 'top'):
+            if self.check_paddle_border( player_id=1, border_id='top'):
                 self.player1.center_y += move_on_press
         elif keycode[1] == 's':
             # check paddle is not at lower border
-            if self.check_paddle_border( self.player1.center_y, self.player1.height, 'bottom'):
+            if self.check_paddle_border( player_id=1, border_id='bottom'):
                 self.player1.center_y -= move_on_press
         # player2 is cpu player
         #elif keycode[1] == 'up':
