@@ -25,6 +25,7 @@ class PongBall(Widget):
         self.pos = Vector(*self.velocity) + self.pos
 
 class PongGame(Widget):
+    check_paused = False
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
@@ -108,6 +109,13 @@ class PongGame(Widget):
             # check paddle is not at lower border
             if self.check_paddle_border( player_id=1, border_id='bottom'):
                 self.player1.center_y -= move_on_press
+        elif keycode[1] == 'escape':
+            if not(self.check_paused):
+                Clock.unschedule(self.update)
+            else:
+                Clock.schedule_interval(self.update, 1.0 / 60.0)
+            self.check_paused = not(self.check_paused)
+
         # player2 is cpu player
         #elif keycode[1] == 'up':
         #    self.player2.center_y += move_on_press

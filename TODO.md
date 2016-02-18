@@ -1,6 +1,7 @@
 # TODO for kivy-tutorial
 * Graphics!
 * Main menu
+* ~~Pause using 'Esc' key~~
 * Pause menu
 * High scores?
 * ~~Rudimentary AI~~
