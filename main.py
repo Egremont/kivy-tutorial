@@ -42,6 +42,12 @@ class PongGame(Widget):
         self.ball.center = self.center
         self.ball.velocity = vel
 
+    def check_paddle_border(self, player_center, player_height, border_id):
+        if border_id=='top':
+            return player_center + player_height/2 < self.top
+        elif border_id=='bottom':
+            return player_center - player_height/2 > self.y
+
     def update(self, dt):
         self.ball.move()
 
@@ -53,12 +59,12 @@ class PongGame(Widget):
         cpu_detect_motion = 100 # decrease -> more difficult
         if self.player2.center_y - self.ball.y < -cpu_detect_motion:
             # check paddle is not at upper border
-            if self.player2.center_y + self.player2.height/2 < self.top:
+            if self.check_paddle_border( self.player2.center_y, self.player2.height, 'top'):
                 #paddle below ball, move up
                 self.player2.center_y += cpu_paddle_speed
         elif self.player2.center_y - self.ball.y > cpu_detect_motion:
             # check paddle is not at lower border
-            if self.player2.center_y - self.player2.height/2 > self.y:
+            if self.check_paddle_border( self.player2.center_y, self.player2.height, 'bottom'):
                 #paddle above ball, move down
                 self.player2.center_y -= cpu_paddle_speed
 
@@ -90,11 +96,11 @@ class PongGame(Widget):
         move_on_press = 50
         if keycode[1] == 'w':
             # check paddle is not at upper border
-            if self.player1.center_y + self.player1.height/2 < self.top:
+            if self.check_paddle_border( self.player1.center_y, self.player1.height, 'top'):
                 self.player1.center_y += move_on_press
         elif keycode[1] == 's':
             # check paddle is not at lower border
-            if self.player1.center_y - self.player1.height/2 > self.y:
+            if self.check_paddle_border( self.player1.center_y, self.player1.height, 'bottom'):
                 self.player1.center_y -= move_on_press
         # player2 is cpu player
         #elif keycode[1] == 'up':
