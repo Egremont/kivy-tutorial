@@ -9,6 +9,11 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 import random
 
+class PauseMenu(Widget):
+    pause_popup = Popup(title='Pause menu', content=Label(text='Game paused, press Esc to continue'),size_hint=(.4, .2), auto_dismiss=False)
+    def pauser(self):
+        self.pause_popup.open()
+
 class PongPaddle(Widget):
     score = NumericProperty(0)
     def bounce_ball(self, ball):
@@ -31,7 +36,7 @@ class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
-    pause_popup = Popup(title='Pause menu', content=Label(text='Game paused, press Esc to continue'),size_hint=(.4, .2), auto_dismiss=False)
+    paused = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(PongGame, self).__init__(**kwargs)
@@ -103,14 +108,15 @@ class PongGame(Widget):
     #    #    self.player2.center_y = touch.y
 
     def pause_menu(self):
-        if not(self.check_paused):
-            self.pause_popup.open()
-            Clock.unschedule(self.update)
-            self.check_paused = True
-        else:
-            self.pause_popup.dismiss()
-            Clock.schedule_interval(self.update, 1.0 / 60.0)
-            self.check_paused = False
+        self.paused.pauser()
+        # if not(self.check_paused):
+        #     self.pause_popup.open()
+        #     Clock.unschedule(self.update)
+        #     self.check_paused = True
+        # else:
+        #     self.pause_popup.dismiss()
+        #     Clock.schedule_interval(self.update, 1.0 / 60.0)
+        #     self.check_paused = False
         #self.check_paused = not(self.check_paused)
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
