@@ -5,6 +5,8 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
 from kivy.vector import Vector
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 import random
 
 class PongPaddle(Widget):
@@ -29,6 +31,7 @@ class PongGame(Widget):
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
+    pause_popup = Popup(title='Pause menu', content=Label(text='Game paused, press Esc to continue'),size_hint=(.4, .2), auto_dismiss=False)
 
     def __init__(self, **kwargs):
         super(PongGame, self).__init__(**kwargs)
@@ -99,6 +102,17 @@ class PongGame(Widget):
     #    #if touch.x > self.width - self.width / 3:
     #    #    self.player2.center_y = touch.y
 
+    def pause_menu(self):
+        if not(self.check_paused):
+            self.pause_popup.open()
+            Clock.unschedule(self.update)
+            self.check_paused = True
+        else:
+            self.pause_popup.dismiss()
+            Clock.schedule_interval(self.update, 1.0 / 60.0)
+            self.check_paused = False
+        #self.check_paused = not(self.check_paused)
+
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         move_on_press = 50
         if keycode[1] == 'w':
@@ -110,11 +124,7 @@ class PongGame(Widget):
             if self.check_paddle_border( player_id=1, border_id='bottom'):
                 self.player1.center_y -= move_on_press
         elif keycode[1] == 'escape':
-            if not(self.check_paused):
-                Clock.unschedule(self.update)
-            else:
-                Clock.schedule_interval(self.update, 1.0 / 60.0)
-            self.check_paused = not(self.check_paused)
+            self.pause_menu()
 
         # player2 is cpu player
         #elif keycode[1] == 'up':
