@@ -2,7 +2,8 @@
 * Graphics!
 * Main menu
 * ~~Pause using 'Esc' key~~
-* Pause menu
+* ~~Pause menu~~
+* Options in pause menu: continue/quit
 * High scores?
 * ~~Rudimentary AI~~
 * Collision check with paddle

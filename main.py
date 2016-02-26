@@ -10,9 +10,17 @@ from kivy.uix.label import Label
 import random
 
 class PauseMenu(Widget):
-    pause_popup = Popup(title='Pause menu', content=Label(text='Game paused, press Esc to continue'),size_hint=(.4, .2), auto_dismiss=False)
-    def pauser(self):
-        self.pause_popup.open()
+    pause_popup = Popup(title='Pause menu',
+                        content=Label(text='Game paused, press Esc to continue'),\
+                        size_hint=(.4, .2), auto_dismiss=False)
+    def handler(self, game_id, is_paused):
+        if not(is_paused):
+            self.pause_popup.open()
+            Clock.unschedule(game_id.update)
+        else:
+            self.pause_popup.dismiss()
+            Clock.schedule_interval(game_id.update, 1.0 / 60.0)
+        return not(is_paused)
 
 class PongPaddle(Widget):
     score = NumericProperty(0)
@@ -32,7 +40,7 @@ class PongBall(Widget):
         self.pos = Vector(*self.velocity) + self.pos
 
 class PongGame(Widget):
-    check_paused = False
+    is_paused = False
     ball = ObjectProperty(None)
     player1 = ObjectProperty(None)
     player2 = ObjectProperty(None)
@@ -107,18 +115,6 @@ class PongGame(Widget):
     #    #if touch.x > self.width - self.width / 3:
     #    #    self.player2.center_y = touch.y
 
-    def pause_menu(self):
-        self.paused.pauser()
-        # if not(self.check_paused):
-        #     self.pause_popup.open()
-        #     Clock.unschedule(self.update)
-        #     self.check_paused = True
-        # else:
-        #     self.pause_popup.dismiss()
-        #     Clock.schedule_interval(self.update, 1.0 / 60.0)
-        #     self.check_paused = False
-        #self.check_paused = not(self.check_paused)
-
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         move_on_press = 50
         if keycode[1] == 'w':
@@ -130,7 +126,7 @@ class PongGame(Widget):
             if self.check_paddle_border( player_id=1, border_id='bottom'):
                 self.player1.center_y -= move_on_press
         elif keycode[1] == 'escape':
-            self.pause_menu()
+            self.is_paused = self.paused.handler(self, self.is_paused)
 
         # player2 is cpu player
         #elif keycode[1] == 'up':
